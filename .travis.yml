@@ -1,2 +1,9 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: aXzzVjX7pr/tARuqGi6PPj0WDgFQHZPKxWWnmex+kwtOhqm7x+w3VqmzqA6emHLyhUsfwR5Qlt2ZVB6aPsBggMrSSemGGOhH51szN4xTDn881mLx6s1+9kJLlgF1eYR8NS5GQtTznMjrC1wSECnLix/K3JKz3CUlJdBFFHFlLGIWf9VqtKhbmO6e9cfV3MdSnAnNpIFbC9bCkPqU4D0rhPSJYz5k+U96pCeSvN4PE7zWlIS+7lxTLnRSQr2RdfxwZavcfCgwdnvZQBkpsXuBXtZ1CrryhMOVFcoHHo5p2H2Vcs3nFBS3Y6Exn0Drb+DDkvVsB8XXhNwKdAlaJnao0k1jVjoTMqbXKE/AnK1a8n7HvqeXRynZ2HTlX1RCec9yU0OC3y/Ef9YWSGKxzRQXYysmIn+rmjNvHH1JuGl35SNGlw6btUf8zlzX+/L3AKpcxDnD8/UyC+yel5Sja3IJgEvEoqOi67uY3yNwdeE19LEr8f4qLBYdT8QxKFu/PYFWKTNbjIHZdRUTuAIJ7Q7HOF/+uMV+l26fOhnrbrZ4WwZ3XfWQtf+kNh8tJrP3grihIXQO/slmxrVUMLbafAGbg2h6Uc9JQUQd0GV3hIhG40Fr9aCGvdqKkDVm8wndaMjxxgHJKEm+sgCDQvZ6BoJ973RSsqCkrdZQo1s7i+On2Ts=
+  app: thawing-thicket-85706
+  on:
+    repo: Austin-Beers/full-stack-capstone
