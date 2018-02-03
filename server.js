@@ -4,7 +4,7 @@ const app = express();
 
 const usersRouter = require('./usersRouter')
 const postsRouter = require('./postsRouter')
-const placesRouter = require('./placesRouter')
+
 // app.use(morgan('common'));
 
 
