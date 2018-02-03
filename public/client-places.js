@@ -15,7 +15,12 @@ var MOCK_PLACES_UPDATE = {
             "pictureBio": "This picture was inspire by one of my coworkers and the location was easily accessable by vehicle"
         },
         {
-            "placeId": "1111111",
+            "place": {
+                "city":"Phoinex",
+                "state":"Arizona",
+                "country":"United States"
+            },
+            "landmark":"oranges",
             "pictureTitle": "Great Divide",
             // "pictureFile": path_to_file,
             "userName": "Gert",
