@@ -1,3 +1,4 @@
+var GEN_POSTS = '/posts'
 var MOCK_MY_PLACES = {
 	"myPlaces": [
         {
@@ -32,7 +33,7 @@ var MOCK_MY_PLACES = {
 };
 
 function getMyPlaces(callbackFn) {
-    setTimeout(function(){ callbackFn(MOCK_MY_PLACES)}, 1000);
+    setTimeout(function(){ callbackFn(GEN_POST)}, 1000);
 }
 
 

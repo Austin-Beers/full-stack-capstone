@@ -1,7 +1,7 @@
 var MOCK_PLACES_UPDATE = {
 	"placesUpdates": [
         {
-            "placeId": "333333",
+            "id": "333333",
             "pictureTitle": "bean",
             // "pictureFile": path_to_file,
             "userName": "Bobert",
@@ -34,7 +34,7 @@ var MOCK_PLACES_UPDATE = {
             "pictureBio": "I love the grand-canyon so I wanted to share my best picture"
         },
         {
-            "placeId": "2222222",
+            "id": "2222222",
             "pictureTitle": "Lost hope",
             "userName": "Flootwood",
             "cameraSettings": {
@@ -47,7 +47,7 @@ var MOCK_PLACES_UPDATE = {
             "pictureBio": "THis image shows a visual representation of my life"
         },
         {
-            "placeId": "4444444",
+            "id": "4444444",
             "pictureTitle": "grammer check",
             "userName": "vaccinequeen",
             "cameraSettings": {
