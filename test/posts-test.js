@@ -37,6 +37,12 @@ function generateIso() {
     return iso[Math.floor(Math.random() * iso.length)];
 }
  
+function generateTime() {
+    const fakerDate = faker.date.past()
+    var seconds = fakerDate.getTime() / 1000;
+    var roundedDate = Math.round(seconds);
+    return new Date(roundedDate * 1000)
+}
 
   function generatePostData() {
     return {
@@ -47,7 +53,7 @@ function generateIso() {
         shutterSpeed: generateShutterSpeed(),
         iso: generateIso()
       },
-      publishedAt: faker.date.past(),
+      publishedAt: generateTime(),
       pictureBio: faker.lorem.sentences()
     };
   }
@@ -112,62 +118,118 @@ it('should return all existing posts', function() {
       .then(function(res) {
         expect(res).to.have.status(200);
         expect(res).to.be.json;
-        expect(res.body.restaurants).to.be.a('array');
-        expect(res.body.restaurants).to.have.length.of.at.least(1);
+         console.log(res);
+        expect(res.body.posts).to.be.a('array');
+        expect(res.body.posts).to.have.length.of.at.least(1);
 
-        res.body.restaurants.forEach(function(restaurant) {
-          expect(restaurant).to.be.a('object');
-          expect(restaurant).to.include.keys(
-            'id', 'userName', 'cameraSetting', 'publishedAt', 'pictureBio');
+        res.body.posts.forEach(function(post) {
+          expect(post).to.be.a('object');
+          expect(post).to.include.keys(
+            'id', 'userName', 'publishedAt', 'pictureBio');
         });
         resPost = res.body.posts[0];
         return Post.findById(resPost.id);
       })
       .then(function(post) {
-
-        expect(resPost.id).to.equal(post.id);
-        expect(resPost.pictureTitle).to.equal(Post.pictureTitle);
+       expect(resPost.id).to.equal(post.id);
+        expect(resPost.pictureTitle).to.equal(post.pictureTitle);
         expect(resPost.userName).to.equal(post.userName);
         expect(resPost.cameraSetting).to.equal(post.cameraSetting);
-        expect(resPost.publishedAt).to.equal(post.publishedAt);
+        expect(resPost.publishedAt).to.equal(post.publishedAt.getTime() / 1000);
        
 
-        expect(resPost.pictureBio).to.equal(Post.pictureBio);
+        expect(resPost.pictureBio).to.equal(post.pictureBio);
       });
   });
 });
 
-//     describe('POST endpoint', function() {
-//       it('should add a new post', function() {
+    describe('POST endpoint', function() {
+      it('should add a new post', function() {
 
-//         const newPost = generatePostData();
+        const newPost = generatePostData();
         
-//         return chai.request(app)
-//         .post('/posts')
-//         .send(newPost)
-//         .then(function(res) {
-//           expect(res).to.have.status(201);
-//           expect(res).to.be.json;
-//           expect(res.body).to.be.a('object');
-//           expect(res.body).to.include.keys(
-//             'id', 'userName', 'cameraSettings', 'pictureBio');
-//           expect(res.body.userName).to.equal(newPost.userName);
-//           expect(res.body.id).to.not.be.null;
-//           expect(res.body.cameraSettings).to.equal(newPost.cameraSettings);
-//           expect(res.body.pictureBio).to.equal(newPost.pictureBio);
-//           return Restaurant.findById(res.body.id);
+        return chai.request(app)
+        .post('/posts')
+        .send(newPost)
+        .then(function(res) {
+          expect(res).to.have.status(201);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.include.keys(
+            'id', 'userName', 'cameraSettings', 'pictureBio');
+          expect(res.body.userName).to.equal(newPost.userName);
+          expect(res.body.id).to.not.be.null;
+          expect(res.body.cameraSettings).to.deep.equal(newPost.cameraSettings);
+          expect(res.body.pictureBio).to.equal(newPost.pictureBio);
+          return Post.findById(res.body.id);
 
-//     })
-//     .then(function(restaurant) {
-//       expect(post.pictureTitle).to.equal(post.pictureTitle);
-//       expect(post.userName).to.equal(newpost.userName);
-//       expect(post.cameraSettings.fStop).to.equal(newPost.cameraSettings.fStop);
-//       expect(post.cameraSettings.shutterSpeed).to.equal(newPost.cameraSettings.shutterSpeed);
-//       expect(post.cameraSettings.iso).to.equal(newPost.cameraSettings.iso);
-//       expect(post.cameraSettings.whiteBalance).to.equal(newPost.cameraSettings.whiteBalance);
-//       expect(post.pictureBio).to.equal(newPost.pictureBio);
-//     });
+    })
+    .then(function(post) {
+      expect(post.pictureTitle).to.equal(newPost.pictureTitle);
+      expect(post.userName).to.equal(newPost.userName);
+      expect(post.cameraSettings.fStop).to.equal(newPost.cameraSettings.fStop);
+      expect(post.cameraSettings.shutterSpeed).to.equal(newPost.cameraSettings.shutterSpeed);
+      expect(post.cameraSettings.iso).to.equal(newPost.cameraSettings.iso);
+      expect(post.cameraSettings.whiteBalance).to.equal(newPost.cameraSettings.whiteBalance);
+      expect(post.pictureBio).to.equal(newPost.pictureBio);
+    });
 
-// });
-// });
   });
+});
+
+describe('PUT endpoint', function() {
+
+ 
+  it('should update fields you send over', function() {
+    
+    const updateData = {
+      pictureTitle: 'tdtdtdttdttdtdtdt',
+      pictureBio: 'bean bag fleind flag sniend snag'
+      
+    };
+    console.log(updateData)
+    return Post
+      .findOne()
+      .then(function(post) {
+        updateData.id = post.id;
+
+        // make request then inspect it to make sure it reflects
+        // data we sent
+        return chai.request(app)
+          .put(`/posts/${post.id}`)
+          .send(updateData);
+      })
+      .then(function(res) {
+        expect(res).to.have.status(204);
+
+        return Post.findById(updateData.id);
+      })
+      .then(function(post) {
+        expect(post.pictureTitle).to.equal(updateData.pictureTitle);
+        expect(post.pictureBio).to.equal(updateData.pictureBio);
+      });
+  });
+});
+
+describe('DELETE endpoint', function() {
+
+  it('delete a posts by id', function() {
+
+    let post;
+
+    return Post
+      .findOne()
+      .then(function(_post) {
+        post = _post;
+        return chai.request(app).delete(`/posts/${post.id}`);
+      })
+      .then(function(res) {
+        expect(res).to.have.status(204);
+        return Post.findById(post.id);
+      })
+      .then(function(_post) {
+        expect(_post).to.be.null;
+      });
+  });
+});
+});
