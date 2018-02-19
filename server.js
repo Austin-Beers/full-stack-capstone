@@ -5,7 +5,8 @@ const morgan = require('morgan');
 const {Post} = require('./models');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
+const formidable = require('formidable');
+const fs = require('fs');
 mongoose.Promise = global.Promise;
 const {PORT, DATABASE_URL, TEST_DATABASE_URL} = require('./config');
 const app = express();
@@ -13,6 +14,12 @@ app.use(morgan('common'));
 app.use(express.static('public'));
 app.use(bodyParser.json());
 //----------PLACES ENDPOINT-------------------------------------------
+
+
+
+
+
+
 //----------Get posts from places
 
 app.get('/posts',(req, res) =>{
@@ -44,6 +51,21 @@ app.get('/posts/:id', (req, res) => {
 });
 
 //---------Adding new post to places
+
+app.post('/fileupload',(req, res) =>{
+  const form = new formidable.IncomingForm();
+  form.parse(req, function (err, fields, files){
+  const oldPath = files.filetoupload.path;
+  const newPath = '/Users/TheDongBringer/Desktop/projects/full-stack-capstone/uploads' + files.filetoupload.name;
+  fs.rename(oldPath, newPath, function (err) {
+    if (err) throw err;
+    res.write('File uploaded and moved!');
+    res.end();
+  });
+  })
+});
+
+
 
 app.post('/posts', (req, res) => {
   const requiredFields = ['pictureTitle', 'userName', 'pictureBio'];
@@ -130,7 +152,7 @@ function runServer(databaseUrl = DATABASE_URL, port = PORT) {
   console.log("====================")
   console.log(databaseUrl)
   return new Promise((resolve, reject) => {
-    mongoose.connect(databaseUrl, {useMongoClient: true}, err => {
+    mongoose.connect(databaseUrl, err => {
       if (err) {
         return reject(err);
       }
