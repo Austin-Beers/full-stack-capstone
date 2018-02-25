@@ -4,6 +4,7 @@ mongoose.Promise = global.Promise;
 const postsSchema = mongoose.Schema({
   pictureTitle: {type: String, required: true},
   userName: {type: String, required: true},
+  uuidFile: {type: String, required: true},
   cameraSettings : {
     fStop: String,
     shutterSpeed: String,
@@ -19,6 +20,7 @@ postsSchema.methods.serialize = function() {
       id: this._id,
       pictureTitle: this.pictureTitle,
       userName: this.userName,
+      uuidFile: this.uuidFile,
       cameraSettings: this.cameraSettings,
       publishedAt: this.publishedAt.getTime() / 1000,
       pictureBio: this.pictureBio

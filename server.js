@@ -1,3 +1,5 @@
+// import { stringify } from 'querystring';
+
 
 
 const express = require('express');
@@ -6,6 +8,7 @@ const {Post} = require('./models');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const formidable = require('formidable');
+const uuidv4 = require('uuid/v4');
 const fs = require('fs');
 mongoose.Promise = global.Promise;
 const {PORT, DATABASE_URL, TEST_DATABASE_URL} = require('./config');
@@ -51,15 +54,23 @@ app.get('/posts/:id', (req, res) => {
 });
 
 //---------Adding new post to places
-
+//---------have a way to expell useless files that were randomized with uuidv4
+//----------link with cloud that is financially responsible
 app.post('/fileupload',(req, res) =>{
   const form = new formidable.IncomingForm();
   form.parse(req, function (err, fields, files){
-  const oldPath = files.filetoupload.path;
-  const newPath = '/Users/TheDongBringer/Desktop/projects/full-stack-capstone/uploads' + files.filetoupload.name;
+  console.log(files)
+  const oldPath = files[0].path;
+  const clientPath = uuidv4(oldPath);
+  const newPath = __dirname + '/uploads/' + clientPath + '.jpg';
+  
   fs.rename(oldPath, newPath, function (err) {
+   returnObj = {
+     path: clientPath
+   }
     if (err) throw err;
-    res.write('File uploaded and moved!');
+    res.write(JSON.stringify(returnObj) )
+    console.log('File uploaded!')
     res.end();
   });
   })
@@ -82,7 +93,7 @@ app.post('/posts', (req, res) => {
     .create({
       pictureTitle: req.body.pictureTitle,
       userName: req.body.userName,
-    
+      
       cameraSettings: req.body.cameraSettings,
       pictureBio: req.body.pictureBio
     })

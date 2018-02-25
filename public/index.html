@@ -9,7 +9,9 @@
         <p>Hello World</p>
         <section class="home-page">
             <nav class="home-nav">
-                
+                <button class="my-places-button">Go to my places</button>
+                <button class="explore-button">Explore places</button>
+                <button class="make-post-button">Post your content here</button>
             </nav>
         </section>
         <section class="my-places">
@@ -19,11 +21,13 @@
 
         </section>
         <section class="post-gen">
-`       <form action="fileupload" method="post" enctype="multipart/form-data">
+`       <form class="file-upload">
             <input type="file" name="filetoupload">
-                
+                <!-- adjust form to handle textual information -->
             <input type="submit">
+        <!-- add submit handler to cs js attached to "post-gen" inorder to include both textual and file -->
         </form>
+        
         </section>
         <section class="sign-up-form">
 
@@ -33,6 +37,6 @@
     integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
     
-    <script src="client-my-places.js"></script>
+    <!-- <script src="client-my-places.js"></script> -->
     <script src="client-places.js"></script> 
 </html>
