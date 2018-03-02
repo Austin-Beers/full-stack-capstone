@@ -1,4 +1,4 @@
-var GEN_POSTS = '/fileuploads'
+var GEN_POSTS = '/posts'
 let files;
 var MOCK_PLACES_UPDATE = {
 	"placesUpdates": [
@@ -151,6 +151,7 @@ function uploadCompletePost(event) {
     $.each(files, function(key, value)
     {
         data.append(key, value);
+        console.log(key, value);
     });
     
     $.ajax({
@@ -182,14 +183,151 @@ function uploadCompletePost(event) {
         }
     });
 }
-    
+
+
 function handleImgSave(event, data){
-    //
-    //send image name along with post info
+    event.stopPropagation(); 
+    event.preventDefault();
+    // console.log(data)
+    let $pictureTitle = $("input[name=picture-title]");
+    let $userName = $("input[name=user-name]");
+    let $fStop = $("input[name=f-stop]");
+    let $shutterSpeed = $("input[name=shutter-speed]");
+    let $iso = $("input[name=iso]");
+    let $whiteBalance = $("input[name=white-balance]");
+    let $pictureBio = $("input[name=picture-bio]");
+    const newData = {
+        pictureTitle: $pictureTitle.val(),
+        uuidFile: data.path,
+        userName: $userName.val() ,
+        cameraSettings: {
+            fStop: $fStop.val(),
+            shutterSpeed: $shutterSpeed.val(),
+            iso: $iso.val(),
+            whiteBalance: $whiteBalance.val(),
+        },
+        pictureBio: $pictureBio.val(),
+    }
+
+    
+    const settings = {
+        url: GEN_POSTS,
+        data: JSON.stringify(newData),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'POST',
+        success: function(){
+            alert('success');
+        },
+          error: function(){
+            alert('failure');
+        }
+    };
+    $.ajax(settings);
     console.log(event, data)
 }
-    //when done
-    // take id of image and put into textual data
+ 
+function getPostData(callback) {
+    console.log("=======")
+    const settings = {
+        url: GEN_POSTS,
+        contentType: 'application/json',
+        dataType: 'json',
+        type: 'GET',
+        success: callback
+    };
+    $.ajax(settings);
+
+}
+
+function renderApiResults(clientPost) {
+ 
+   
+   return `
+    <div class="post-container">
+        <a class="user-uuid-file"><img src=${clientPost.uuidFile} + '.jpeg'></a>
+        <h1>
+            <div class="title">${clientPost.pictureTitle}</div>
+        </h1>    
+        <h2>
+            <div class="un">${clientPost.userName}</div>
+            <div class="bio">${clientPost.pictureBio}</div>
+        </h2>
+    </div>
+    <div class="aside-container">
+        <h4>Camera settings used:</h4>
+            <ul>
+                <li>
+                    <div class="settings-box">
+                        <p>
+                            Aperature settiing: <span class="app-set">${clientPost.cameraSettings.fStop}</span>
+                        </p>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="settings-box">
+                        <p>
+                            Shutter settiing: <span class="shut-set">${clientPost.cameraSettings.shutterSpeed}</span>
+                        </p>
+                    </div>
+                </li>
+                    
+                <li>
+                    <div class="settings-box">
+                        <p>
+                            ISO settiing: <span class="iso-set">${clientPost.cameraSettings.iso}</span>
+                        </p>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="settings-box">
+                        <p>
+                            White balance setting: <span class="wb-set">${clientPost.cameraSettings.whiteBalance}</span>
+                        </p>
+                    </div>
+                </li>
+            </ul>
+    </div>
+    `
+}
+
+function displayApiResults(data) {
+    console.log(data)
+    const apiResults = data.posts.map((item, index) => renderApiResults(item));
+    $(".api-result").html(apiResults);
+}
+
+//------------------put and delete ajax calls-----------------
+
+function handleUpdate(event, data) {
+    event.stopPropagation(); 
+    event.preventDefault();
+    let $updateTitle = $("input[name=update-title]");
+    let $updateBio = $("input[name=update-bio]");
+    const updatedData = {
+        updatetitle: $updateTitle.val(),
+        updateBio: $updateBio.val()
+    }
+    const settings = {
+        url: GEN_POSTS,
+        // data: JSON.stringify(newData),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'put',
+        success: function(){
+            alert('success');
+        },
+        error: function(){
+            alert('failure');
+        }
+    };
+    $.ajax(settings);
+
+}
+
+
 
 
 //--------------App.js----------
@@ -200,10 +338,11 @@ function renderHomePage() {
     $(".my-places").hide()
     $(".post-gen").hide()
     $(".explore").hide()
-    
+    $(".post-update").hide()
     $(".my-places-button").click()
     $(".explore-button").click(renderExplore)
     $(".make-post-button").click(renderPostGen)
+    $("update-button").click(renderUpdateForm)
 }
 
 function renderPostGen() {
@@ -226,6 +365,16 @@ function renderExplore() {
     $(".home-page").hide();
     $(".my-places").hide();
     $(".explore").show();
+    getPostData(displayApiResults);
+}
+
+function renderUpdateForm() {
+    $(".post-gen").hide();
+    $(".home-page").hide();
+    $(".my-places").hide();
+    $(".explore").hide();
+    $(".post-update").show();
+
 }
 
 renderHomePage();

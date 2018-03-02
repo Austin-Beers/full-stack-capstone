@@ -3,27 +3,50 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
-    <title>placeScape</title>
+        <link rel="stylesheet" type="text/css" href="index.css">
+        <title>placeScape</title>
     </head>
     <body>
-        <p>Hello World</p>
+        <p>PlaceScape</p>
         <section class="home-page">
             <nav class="home-nav">
                 <button class="my-places-button">Go to my places</button>
                 <button class="explore-button">Explore places</button>
                 <button class="make-post-button">Post your content here</button>
+                <button class="update-button">Update your content here</button>
             </nav>
         </section>
         <section class="my-places">
-
-        </section>
+    </section>
         <section class="explore">
-
+            <div class="api-result"></div>
         </section>
         <section class="post-gen">
 `       <form class="file-upload">
-            <input type="file" name="filetoupload">
-                <!-- adjust form to handle textual information -->
+            <label for="filetoupload">Upload your picture here</label>
+                <input type="file" name="filetoupload">
+            
+            <label for="picture-title">Enter a creative title for your Image</label>
+                <input type="text" name="picture-title">
+        
+            <label for="user-name">Enter your user name</label>
+                <input type="text" name="user-name">
+            
+            <label for="f-stop">Include the camera's aperture setting that was used to take the picture</label>
+                <input type="text" name="f-stop">
+            
+            <label for="shutter-speed">Include the camera's shutter setting that was used to take the picture</label>
+                <input type="text" name="shutter-speed">
+            
+            <label for="iso">Include the camera's ISO setting that was used to take the picture</label>
+                <input type="text" name="iso">
+            
+            <label for="white-balance">Include the camera's white balance setting that was used to take the picture</label>
+                <input type="text" name="white-balance">
+            
+            <label for="picture-bio">PLease include the specific location at which the picture was taken icluding any other comments that would like to be said about your landscape!</label>
+                <input type="text" name="picture-bio">
+            
             <input type="submit">
         <!-- add submit handler to cs js attached to "post-gen" inorder to include both textual and file -->
         </form>
@@ -31,6 +54,14 @@
         </section>
         <section class="sign-up-form">
 
+        </section>
+        <section class="post-update">
+            <form class="post-resubmit">
+                <label for="update-title">Upload your picture here</label>
+                <input type="text" name="update-title">
+                <label for="update-bio">Upload your picture here</label>
+                <input type="text" name="update-bio">
+            </form>
         </section>
     </body>
     <script src="//code.jquery.com/jquery-3.1.1.min.js"

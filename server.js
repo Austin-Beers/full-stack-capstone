@@ -8,17 +8,19 @@ const {Post} = require('./models');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const formidable = require('formidable');
-const uuidv4 = require('uuid/v4');
+const uuidv4 = require('uuid/v4');   
+const path = require('path');
 const fs = require('fs');
 mongoose.Promise = global.Promise;
 const {PORT, DATABASE_URL, TEST_DATABASE_URL} = require('./config');
 const app = express();
 app.use(morgan('common'));
 app.use(express.static('public'));
+app.use(express.static('uploads'));
+app.use('/static', express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.json());
+
 //----------PLACES ENDPOINT-------------------------------------------
-
-
 
 
 
@@ -59,7 +61,7 @@ app.get('/posts/:id', (req, res) => {
 app.post('/fileupload',(req, res) =>{
   const form = new formidable.IncomingForm();
   form.parse(req, function (err, fields, files){
-  console.log(files)
+  // console.log(files)
   const oldPath = files[0].path;
   const clientPath = uuidv4(oldPath);
   const newPath = __dirname + '/uploads/' + clientPath + '.jpg';
@@ -79,6 +81,7 @@ app.post('/fileupload',(req, res) =>{
 
 
 app.post('/posts', (req, res) => {
+  console.log(req);
   const requiredFields = ['pictureTitle', 'userName', 'pictureBio'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -93,7 +96,7 @@ app.post('/posts', (req, res) => {
     .create({
       pictureTitle: req.body.pictureTitle,
       userName: req.body.userName,
-      
+      uuidFile: req.body.uuidFile,
       cameraSettings: req.body.cameraSettings,
       pictureBio: req.body.pictureBio
     })
