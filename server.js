@@ -27,6 +27,11 @@ app.use(bodyParser.json());
 
 //----------Get posts from places
 
+app.get('/uploads',(req, res) =>{
+res.send(req.params.uuidFile)
+});
+
+
 app.get('/posts',(req, res) =>{
    console.log('recieved req')
   Post

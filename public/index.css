@@ -2,10 +2,41 @@ body {
     box-sizing: border-box;
 }
 
-.post-gen {
+.main-container {
     display: flex;
 }
-.file-class {
+
+.home-nav {
     display: flex;
-    flex-direction: column;   
+    flex-wrap: wrap;
 }
+}
+
+.my-places-button {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    min-width: 75px;
+}
+
+.explore-button {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    min-width: 75px;
+}
+
+.make-post-button {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    min-width: 75px;
+}
+
+.update-button {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    min-width: 75px;
+}
+

@@ -1,4 +1,5 @@
 var GEN_POSTS = '/posts'
+var POSTS_ID =  '/posts/:id'
 let files;
 var MOCK_PLACES_UPDATE = {
 	"placesUpdates": [
@@ -228,7 +229,7 @@ function handleImgSave(event, data){
 }
  
 function getPostData(callback) {
-    console.log("=======")
+    console.log("GET")
     const settings = {
         url: GEN_POSTS,
         contentType: 'application/json',
@@ -244,51 +245,63 @@ function renderApiResults(clientPost) {
  
    
    return `
-    <div class="post-container">
-        <a class="user-uuid-file"><img src=${clientPost.uuidFile} + '.jpeg'></a>
-        <h1>
-            <div class="title">${clientPost.pictureTitle}</div>
-        </h1>    
-        <h2>
-            <div class="un">${clientPost.userName}</div>
-            <div class="bio">${clientPost.pictureBio}</div>
-        </h2>
-    </div>
-    <div class="aside-container">
-        <h4>Camera settings used:</h4>
-            <ul>
-                <li>
-                    <div class="settings-box">
-                        <p>
-                            Aperature settiing: <span class="app-set">${clientPost.cameraSettings.fStop}</span>
-                        </p>
-                    </div>
-                </li>
+    <div class="post">
+        <div class="post-container">
+                
+                <a class="user-uuid-file"><img src=${clientPost.uuidFile} + '.jpeg'></a>
+                <h1>
+                    <div class="title">${clientPost.pictureTitle}</div>
+                </h1>    
+                <h2>
+                    <div class="un">${clientPost.userName}</div>
+                    <div class="bio">${clientPost.pictureBio}</div>
+                </h2>
+            </div>
+            <div class="aside-container">
+                <h4>Camera settings used:</h4>
+                    <ul>
+                        <li>
+                            <div class="settings-box">
+                                <p>
+                                    Aperature settiing: <span class="app-set">${clientPost.cameraSettings.fStop}</span>
+                                </p>
+                            </div>
+                        </li>
 
-                <li>
-                    <div class="settings-box">
-                        <p>
-                            Shutter settiing: <span class="shut-set">${clientPost.cameraSettings.shutterSpeed}</span>
-                        </p>
-                    </div>
-                </li>
-                    
-                <li>
-                    <div class="settings-box">
-                        <p>
-                            ISO settiing: <span class="iso-set">${clientPost.cameraSettings.iso}</span>
-                        </p>
-                    </div>
-                </li>
+                        <li>
+                            <div class="settings-box">
+                                <p>
+                                    Shutter settiing: <span class="shut-set">${clientPost.cameraSettings.shutterSpeed}</span>
+                                </p>
+                            </div>
+                        </li>
+                            
+                        <li>
+                            <div class="settings-box">
+                                <p>
+                                    ISO settiing: <span class="iso-set">${clientPost.cameraSettings.iso}</span>
+                                </p>
+                            </div>
+                        </li>
 
-                <li>
-                    <div class="settings-box">
-                        <p>
-                            White balance setting: <span class="wb-set">${clientPost.cameraSettings.whiteBalance}</span>
-                        </p>
-                    </div>
-                </li>
-            </ul>
+                        <li>
+                            <div class="settings-box">
+                                <p>
+                                    White balance setting: <span class="wb-set">${clientPost.cameraSettings.whiteBalance}</span>
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+            </div>
+    
+        <button class="edit-post">edit here</button>
+        <form class="post-resubmit" id="${clientPost.id}" hidden>
+                <label for="update-title">Upload your picture here</label>
+                <input type="text" name="update-title">
+                <label for="update-bio">Upload your picture here</label>
+                <input type="text" name="update-bio">
+                <input type="submit">
+        </form>
     </div>
     `
 }
@@ -297,25 +310,40 @@ function displayApiResults(data) {
     console.log(data)
     const apiResults = data.posts.map((item, index) => renderApiResults(item));
     $(".api-result").html(apiResults);
+    $(".edit-post").click(function(event) {
+        console.log("currentTarget", event.currentTarget);
+        console.log($(event.currentTarget).siblings(".post-resubmit"))
+        $(event.currentTarget).siblings(".post-resubmit").show();
+        event.stopPropagation(); 
+        event.preventDefault();
+    })
+    $(".post-resubmit").submit(function(event) {
+        const postId = $(event.currentTarget).attr('id')
+        let updateTitle = $(event.currentTarget).find("input[name=update-title]").val();
+        let updateBio = $(event.currentTarget).find("input[name=update-bio]").val();
+        console.log(updateTitle)
+        event.stopPropagation(); 
+        event.preventDefault(); 
+        updateableFields = {
+            id: postId,
+            pictureTitle: updateTitle,
+            pictureBio: updateBio,
+        }
+        handleUpdate(updateableFields);
+    
+    })
 }
 
 //------------------put and delete ajax calls-----------------
 
-function handleUpdate(event, data) {
-    event.stopPropagation(); 
-    event.preventDefault();
-    let $updateTitle = $("input[name=update-title]");
-    let $updateBio = $("input[name=update-bio]");
-    const updatedData = {
-        updatetitle: $updateTitle.val(),
-        updateBio: $updateBio.val()
-    }
+function handleUpdate(data) {
+    
     const settings = {
-        url: GEN_POSTS,
-        // data: JSON.stringify(newData),
+        url: POSTS_ID,
+         data: JSON.stringify(data),
         dataType: 'json',
         contentType: 'application/json',
-        type: 'put',
+        type: 'PUT',
         success: function(){
             alert('success');
         },
@@ -342,11 +370,11 @@ function renderHomePage() {
     $(".my-places-button").click()
     $(".explore-button").click(renderExplore)
     $(".make-post-button").click(renderPostGen)
-    $("update-button").click(renderUpdateForm)
+    
 }
 
 function renderPostGen() {
-    console.log("boiiii");
+    console.log("Post generation success");
     $(".post-gen").show();
     $(".home-page").hide();
     $(".my-places").hide();
@@ -360,21 +388,24 @@ function renderPostGen() {
 
 
 function renderExplore() {
-    console.log("girlllll")
+    console.log("Explore generation success")
     $(".post-gen").hide();
     $(".home-page").hide();
     $(".my-places").hide();
     $(".explore").show();
     getPostData(displayApiResults);
+    
 }
+// function(event) {
+        
+//     const postId = $("p").parent(".post-container").val()
 
-function renderUpdateForm() {
-    $(".post-gen").hide();
-    $(".home-page").hide();
-    $(".my-places").hide();
-    $(".explore").hide();
-    $(".post-update").show();
+//     //find parent div inorder to hunt for id 
+//     //find existing ubdatable fields info
+//     //render update form and pass in corresponding fields in params 
+//     //change render updateform to incorperate updatable fields with form handling saying the things you want to extract => send as ajax request.
 
-}
+// })
+
 
 renderHomePage();
