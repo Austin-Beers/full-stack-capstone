@@ -246,7 +246,7 @@ function renderApiResults(clientPost) {
    
    return `
     <div class="post">
-        <div class="post-container">
+        <div class="post-container" id="${clientPost.id}">
                 
                 <a class="user-uuid-file"><img src=${clientPost.uuidFile} + '.jpeg'></a>
                 <h1>
@@ -295,13 +295,14 @@ function renderApiResults(clientPost) {
             </div>
     
         <button class="edit-post">edit here</button>
-        <form class="post-resubmit" id="${clientPost.id}" hidden>
+        <form class="post-resubmit" hidden>
                 <label for="update-title">Upload your picture here</label>
                 <input type="text" name="update-title">
                 <label for="update-bio">Upload your picture here</label>
                 <input type="text" name="update-bio">
                 <input type="submit">
         </form>
+        <button class="delete-post">Delete Post</button>
     </div>
     `
 }
@@ -318,7 +319,7 @@ function displayApiResults(data) {
         event.preventDefault();
     })
     $(".post-resubmit").submit(function(event) {
-        const postId = $(event.currentTarget).attr('id')
+        const postId = $(".post-container").attr('id')
         let updateTitle = $(event.currentTarget).find("input[name=update-title]").val();
         let updateBio = $(event.currentTarget).find("input[name=update-bio]").val();
         console.log(updateTitle)
@@ -329,9 +330,21 @@ function displayApiResults(data) {
             pictureTitle: updateTitle,
             pictureBio: updateBio,
         }
+        console.log('bro')
         handleUpdate(updateableFields);
-    
+    });
+    $(document).ready(function() {
+        $(".post-resubmit").submit(function(e) {
+            $(".post-resubmit").hide();
+        });
+    });
+    $(".delete-post").click(function(event) {
+        const deleteId = $(".post-container").attr('id')
+        event.stopPropagation(); 
+        event.preventDefault(); 
+        handleDelete(deleteId);
     })
+
 }
 
 //------------------put and delete ajax calls-----------------
@@ -339,13 +352,15 @@ function displayApiResults(data) {
 function handleUpdate(data) {
     
     const settings = {
-        url: POSTS_ID,
+        url: GEN_POSTS + "/" + data.id,
          data: JSON.stringify(data),
         dataType: 'json',
         contentType: 'application/json',
         type: 'PUT',
         success: function(){
-            alert('success');
+           //on success append html with new updated items
+           //get rid of alert when implementation above is completed 
+           alert('success');
         },
         error: function(){
             alert('failure');
@@ -355,7 +370,21 @@ function handleUpdate(data) {
 
 }
 
-
+function handleDelete(id) {
+    const settings = {
+        url: GEN_POSTS + "/" + id,
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'DELETE',
+        success: function(){
+            alert('success');
+        },
+        error: function(){
+            alert('failure');
+        }
+    };
+    $.ajax(settings);
+}
 
 
 //--------------App.js----------
