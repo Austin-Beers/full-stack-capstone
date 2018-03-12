@@ -27,9 +27,35 @@ app.use(bodyParser.json());
 
 //----------Get posts from places
 
-app.get('/uploads',(req, res) =>{
-res.send(req.params.uuidFile)
-});
+app.get('/posts/:searchTerm',(req, res) =>{
+  if( Post.find({ userName:req.params.searchTerm}).count() ) //<--are they searching by username
+  {
+    
+    return Post.find({ userName:req.params.searchTerm})
+    .exec()
+    .then((obj)=>{ 
+      res.status(200).json({
+        posts: obj.map(
+          (post) => post.serialize())
+          //calling each item return a "post"
+      });
+      console.log(obj);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'something went screwy' });
+      });
+      console.log('finished req')
+      }
+  else
+  {
+    //handle bio
+    return Post.find({ bio:req.params.searchTerm})
+    .exec()
+    .then((obj)=>{ res.status(200).json() })
+  }
+
+})
 
 
 app.get('/posts',(req, res) =>{
