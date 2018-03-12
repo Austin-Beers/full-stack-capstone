@@ -1,3 +1,10 @@
+//make seperate endpoint for search, be sure to include mapping through collection for searched term 
+//fix delete 
+//change my places to search by field
+
+
+
+
 var GEN_POSTS = '/posts'
 var POSTS_ID =  '/posts/:id'
 let files;
@@ -248,7 +255,7 @@ function renderApiResults(clientPost) {
     <div class="post">
         <div class="post-container" id="${clientPost.id}">
                 
-                <a class="user-uuid-file"><img src=${clientPost.uuidFile} + '.jpeg'></a>
+                <a class="user-uuid-file"><img src=${'/' + clientPost.uuidFile + '.jpg'}></a>
                 <h1>
                     <div class="title">${clientPost.pictureTitle}</div>
                 </h1>    
@@ -358,9 +365,10 @@ function handleUpdate(data) {
         contentType: 'application/json',
         type: 'PUT',
         success: function(){
-           //on success append html with new updated items
-           //get rid of alert when implementation above is completed 
-           alert('success');
+             console.log(data)
+            $(`#${data.id}`).find(".title").text(data.pictureTitle)
+             $(`#${data.id}`).find(".bio").text(data.pictureBio)
+           
         },
         error: function(){
             alert('failure');
@@ -377,7 +385,9 @@ function handleDelete(id) {
         contentType: 'application/json',
         type: 'DELETE',
         success: function(){
-            alert('success');
+            console.log(id)
+            $(`#${id}`).parent().remove();
+            
         },
         error: function(){
             alert('failure');

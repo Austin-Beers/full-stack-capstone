@@ -234,8 +234,13 @@ header nav li:last-child{
 
 }
 
+/*----------------
+ 	Explore
+----------------*/
 
-
+.user-uuid-file img{
+    max-width: 300px;
+}
 
 
 
