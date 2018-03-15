@@ -28,7 +28,7 @@ ul, nav{
     opacity: 0.8;
 }
 
-.my-places-button, 
+.search-button, 
 .explore-button, 
 .make-post-button,
 .update-button {
@@ -43,7 +43,7 @@ ul, nav{
 
 
 .page-logo,
-.my-places-button, 
+.search-button, 
 .explore-button, 
 .make-post-button,
 .update-button,
@@ -59,7 +59,7 @@ ul, nav{
     opacity: 1;
 }
 
-.my-places-button:hover {
+.search-button:hover {
     opacity: 1;
 } 
 
@@ -239,13 +239,29 @@ header nav li:last-child{
 ----------------*/
 
 .user-uuid-file img{
-    max-width: 300px;
+    max-height: 200px;
 }
 
+.post {
+    margin: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
 
+.post-container {
+    display: flex;
+    flex: 2;
+}
 
+.aside-container {
+    display: flex;
+    flex: 2;
+}
 
-
+.title {
+    padding: 5px
+}
 
 /* .main-container {
     display: flex;
@@ -257,7 +273,7 @@ header nav li:last-child{
 }
 }
 
-.my-places-button {
+.search-button {
     display: flex;
     flex-wrap: wrap;
     flex: 1;

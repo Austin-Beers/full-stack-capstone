@@ -138,7 +138,9 @@ function displayPostsData(data) {
     addToAAIndex(data.results.length);
 
 }
-
+//----------------
+//-----------------AJAX calls for POST & GET
+//----------------
 //------------Ajax call for /uploads/
 
 
@@ -148,6 +150,24 @@ function prepareUpload(event) {
         files = event.target.files;
 
 }
+// <form class="serach-upload">
+//<label for="searchUplaod">Search through our posts by User-name or by City</label>
+//<input type="text" name="searchUpload">
+
+function getPostSearchTerm(callback) {
+    
+    let $searchTerm = $("input[name=searchUpload]");
+    let searchData = $searchTerm.val()
+    const settings = {
+        url: GEN_POSTS + "/" + searchData,
+        contentType: 'application/json',
+        dataType: 'json',
+        type: 'GET',
+        success: callback
+    };
+    $.ajax(settings);
+}
+
 
 function uploadCompletePost(event) {
     // implement second ajax call for textual informationthat alos include the saved image 
@@ -406,9 +426,34 @@ function renderHomePage() {
     $(".post-gen").hide()
     $(".explore").hide()
     $(".post-update").hide()
-    $(".my-places-button").click()
+    $(".search-button").click(renderApiSearch)
     $(".explore-button").click(renderExplore)
     $(".make-post-button").click(renderPostGen)
+    
+}
+
+function renderApiSearch(){
+    
+    $(".post-gen").hide();
+    $(".home-page").hide();
+    $(".my-places").hide();
+    $(".explore").hide();
+    $(".search-page").show()
+    $(".search-upload").submit(function(event){
+        event.stopPropagation(); 
+        event.preventDefault(); 
+        getPostSearchTerm(displayApiResults);
+    })
+    
+}
+
+function renderExplore() {
+    console.log("Explore generation success")
+    $(".post-gen").hide();
+    $(".home-page").hide();
+    $(".my-places").hide();
+    $(".explore").show();
+    getPostData(displayApiResults);
     
 }
 
@@ -426,15 +471,13 @@ function renderPostGen() {
 }
 
 
-function renderExplore() {
-    console.log("Explore generation success")
-    $(".post-gen").hide();
-    $(".home-page").hide();
-    $(".my-places").hide();
-    $(".explore").show();
-    getPostData(displayApiResults);
-    
-}
+
+
+
+
+
+
+
 // function(event) {
         
 //     const postId = $("p").parent(".post-container").val()

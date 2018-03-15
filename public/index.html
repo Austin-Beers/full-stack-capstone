@@ -14,7 +14,7 @@
             <header>
                 <h2><button class="page-logo">PlaceScape</button></h2>
                     <nav class="home-nav">
-                        <li><button class="my-places-button">My places</button></li>
+                        <li><button class="search-button">Search</button></li>
                         <li><button class="explore-button">Explore</button></li>
                         <li><button class="make-post-button">Post</button></li>
                         <li><button class="update-button">Edit</button></li>
@@ -30,7 +30,15 @@
         
         
         </section>
-        <section class="my-places">
+        <section class="search-page">
+            <form class="search-upload">
+                <label for="searchUplaod">Search through our posts by User-name or by City</label>
+                <input type="text" name="searchUpload">
+                <input type="submit">
+            </form>
+            
+            <div class="api-result"></div>
+        </section>
     </section>
         <section class="explore">
             <div class="api-result"></div>

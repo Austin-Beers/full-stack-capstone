@@ -14,7 +14,7 @@ const postsSchema = mongoose.Schema({
   publishedAt: {type: Date, default: Date.now},
   pictureBio: {type: String, required: true}
 });
-
+postsSchema.index({ pictureBio: 'text'})
 postsSchema.methods.serialize = function() {
     return {
       id: this._id,

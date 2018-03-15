@@ -28,35 +28,44 @@ app.use(bodyParser.json());
 //----------Get posts from places
 
 app.get('/posts/:searchTerm',(req, res) =>{
-  if( Post.find({ userName:req.params.searchTerm}).count() ) //<--are they searching by username
-  {
+  Post.count({ userName:req.params.searchTerm}, function (err, count) {
+  console.log(count)
+  if( count ) //<--are they searching by username
+  { 
     
     return Post.find({ userName:req.params.searchTerm})
-    .exec()
-    .then((obj)=>{ 
+      .exec()
+      .then((obj)=>{ 
       res.status(200).json({
-        posts: obj.map(
-          (post) => post.serialize())
+      posts: obj.map(
+      (post) => post.serialize())
           //calling each item return a "post"
-      });
-      console.log(obj);
+    });
+    console.log(obj);
     })
     .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'something went screwy' });
-      });
-      console.log('finished req')
-      }
-  else
-  {
+    console.error(err);
+    res.status(500).json({ error: 'something went screwy' });
+    });
+    console.log('finished req')
+    }
+  else { 
+    console.log("else block")
     //handle bio
-    return Post.find({ bio:req.params.searchTerm})
-    .exec()
-    .then((obj)=>{ res.status(200).json() })
+    return Post.find({ $pictureBio: req.params.searchTerm})
+      .exec()
+      .then((obj)=>{ 
+        res.status(200).json({
+          posts: obj.map(
+          (post) => post.serialize())
+          //calling each item return a "post"
+        });
+        console.log(obj);
+      })
   }
 
 })
-
+});
 
 app.get('/posts',(req, res) =>{
    console.log('recieved req')
